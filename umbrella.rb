@@ -12,8 +12,16 @@ google_maps_url = "https://maps.googleapis.com/maps/api/geocode/json" + "?addres
 maps_response_raw = HTTP.get(google_maps_url)
 maps_response_parsed = JSON.parse(maps_response_raw)
 #pp maps_response_parsed.fetch("results")[0]
-pp lat = maps_response_parsed.fetch("results")[0].fetch("geometry").fetch("location").fetch("lat")
-pp long = maps_response_parsed.fetch("results")[0].fetch("geometry").fetch("location").fetch("lng")
+lat = maps_response_parsed.fetch("results")[0].fetch("geometry").fetch("location").fetch("lat")
+long = maps_response_parsed.fetch("results")[0].fetch("geometry").fetch("location").fetch("lng")
 
-
-#pirate_weather_url
+# pirate weather code
+pirate_weather_url = "https://api.pirateweather.net/forecast/" +"#{ENV.fetch("PIRATE_WEATHER_KEY")}"+"/#{lat}"+",#{long}"
+pweather_response_raw = HTTP.get(pirate_weather_url)
+pweather_response_parsed = JSON.parse(pweather_response_raw)
+current_temp = pweather_response_parsed.fetch("currently").fetch("temperature")
+nexthour_summary = pweather_response_parsed.fetch("minutely").fetch("summary")
+puts "Checking the weather at #{location}...."
+puts "Your coordinates are #{lat},#{long}."
+puts "It is currently #{current_temp}."
+puts "Next hour: #{nexthour_summary}"
